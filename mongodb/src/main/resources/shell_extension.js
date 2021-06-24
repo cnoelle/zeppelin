@@ -107,6 +107,34 @@ function printTable(dbquery, fields, flattenArray) {
 if (globalThis.DBCommandCursor)
     (DBCommandCursor.prototype || DBCommandCursor).table = (DBQuery.prototype || DBQuery).table;
 
+globalThis.Zeppelin = globalThis.Zeppelin || class {
+    
+    /**
+    * @param rows an array of objects (or a cursor), e.g. [{"a": 1, "b": 2}, {"a": 7, "b": 0}]
+    * @param header row keys to be included, e.g. ["a", "b"]. Optional. Default value: keys of first element in rows array
+    * @param options optional parameter. Supported keys: "transformations": { [key: string]: function(value, row) }
+    * @return a string of the form "%table\n..."
+    */
+    static toTable(rows, header, options) {
+        if (!header)
+            header = Object.keys(rows[0]);
+        if (!Array.isArray(rows) && rows.toArray)
+            rows = rows.toArray();
+        const transformations = options?.transformations || {};
+        const entries = rows.map(row => header.map(h => h in transformations ? transformations[h](row[h], row) : row[h]));
+        const tableRows = entries.map(e => e.join("\t"));
+        return "%table\n" + header.join("\t") + "\n" + tableRows.join("\n");
+    }
+    
+    /**
+    * See Zeppelin.toTable
+    */
+    static showTable(rows, header, options) {
+        print(globalThis.Zeppelin.toTable(rows, header, options));
+    }
+    
+}
+
 var userName = "USER_NAME_PLACEHOLDER";
 var password = "PASSWORD_PLACEHOLDER";
 var authDB = "AUTH_DB_PLACEHOLDER";
