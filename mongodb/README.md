@@ -6,3 +6,12 @@ so I forked this for those people who want to use mongodb in zeppelin.
 ### Technical overview
 it use mongo shell to execute scripts.All you need to do is to configure mongodb interpreter,
 and then study mongo aggregate functions.
+
+## Usage
+
+### Query data and print table
+
+```javascript
+let entries = db.getSiblingDB("MyDb").MyCollection.find({}).limit(50);
+Zeppelin.showTable(entries);
+```
