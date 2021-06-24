@@ -9,7 +9,18 @@ and then study mongo aggregate functions.
 
 Alternatively, the new mongosh shell is supported (for MongoDB >= 4.0). 
 
-## Usage with Docker and mongosh
+## Usage
+
+### Query data and print table
+
+(Note: as of 2021-06-04 this does not work with the current version 0.9.0, but rather requires a SNAPSHOT build at least of the mongodb interpreter)
+
+```javascript
+let entries = db.getSiblingDB("MyDb").MyCollection.find({}).limit(50);
+Zeppelin.showTable(entries);
+```
+
+## Run with Docker and mongosh
 
 (Note: as of 2021-06-04 this does not work with the current version 0.9.0, but rather requires a SNAPSHOT build at least of the mongodb interpreter)
 
@@ -34,6 +45,3 @@ console.log(db.MyCollection.findOne({}))
 ```
 
 and run the paragraph
-
-
-
